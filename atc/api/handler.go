@@ -220,5 +220,5 @@ func NewHandler(
 		atc.ClearWall: http.HandlerFunc(wallServer.ClearWall),
 	}
 
-	return rata.NewRouter(atc.Routes, wrapper.Wrap(handlers))
+	return atc.NewRouter(wrapper.Wrap(handlers))
 }
