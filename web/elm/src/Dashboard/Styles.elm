@@ -609,8 +609,8 @@ searchContainer screenSize =
            )
 
 
-searchInput : ScreenSize -> List (Html.Attribute msg)
-searchInput screenSize =
+searchInput : ScreenSize -> Bool -> List (Html.Attribute msg)
+searchInput screenSize hasQuery =
     let
         widthStyles =
             case screenSize of
@@ -622,8 +622,17 @@ searchInput screenSize =
 
                 BigDesktop ->
                     [ style "width" "220px" ]
+
+        borderColor =
+            if hasQuery then
+                -- grey 30
+                "#c6c6c6"
+
+            else
+                -- grey 60 --
+                "#666666"
     in
-    [ style "background-color" "transparent"
+    [ style "background-color" "#262626" -- grey 90
     , style "background-image" <|
         Assets.backgroundImage <|
             Just Assets.SearchIcon
@@ -632,8 +641,8 @@ searchInput screenSize =
     , style "height" "30px"
     , style "min-height" "30px"
     , style "padding" "0 42px"
-    , style "border" <| "1px solid " ++ Colors.inputOutline
-    , style "color" Colors.dashboardText
+    , style "border" <| "1px solid " ++ borderColor
+    , style "color" "#f2f2f2" -- grey 100
     , style "font-size" "1.15em"
     , style "font-family" Views.Styles.fontFamilyDefault
     , style "outline" "0"
@@ -641,32 +650,23 @@ searchInput screenSize =
         ++ widthStyles
 
 
-searchClearButton : Bool -> List (Html.Attribute msg)
-searchClearButton active =
-    let
-        opacityValue =
-            if active then
-                "1"
-
-            else
-                "0.2"
-    in
+searchClearButton : List (Html.Attribute msg)
+searchClearButton =
     [ style "background-image" <|
         Assets.backgroundImage <|
             Just Assets.CloseIcon
     , style "background-repeat" "no-repeat"
     , style "background-position" "10px 10px"
     , style "border" "0"
-    , style "color" Colors.inputOutline
+    , style "color" "transparent"
     , style "position" "absolute"
     , style "right" "0"
     , style "padding" "17px"
-    , style "opacity" opacityValue
     ]
 
 
-dropdownItem : Bool -> List (Html.Attribute msg)
-dropdownItem isSelected =
+dropdownItem : Bool -> Bool -> List (Html.Attribute msg)
+dropdownItem isSelected hasQuery =
     let
         coloration =
             if isSelected then
@@ -678,11 +678,20 @@ dropdownItem isSelected =
                 [ style "background-color" Colors.dropdownFaded
                 , style "color" Colors.dropdownUnselectedText
                 ]
+
+        borderColor =
+            if hasQuery then
+                -- grey 30
+                "#c6c6c6"
+
+            else
+                -- grey 60 --
+                "#666666"
     in
     [ style "padding" "0 42px"
     , style "line-height" "30px"
     , style "list-style-type" "none"
-    , style "border" <| "1px solid " ++ Colors.inputOutline
+    , style "border" <| "1px solid " ++ borderColor
     , style "margin-top" "-1px"
     , style "font-size" "1.15em"
     , style "cursor" "pointer"

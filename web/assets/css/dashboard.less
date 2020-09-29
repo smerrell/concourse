@@ -99,6 +99,27 @@
   background-repeat: no-repeat;
 }
 
+// TODO jomsie FIXME: grey 30
+#search-input-field {
+  &::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+    color: #c6c6c6;
+  }
+
+  &::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #c6c6c6;
+    opacity: 1;
+  }
+
+  &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #c6c6c6;
+    opacity: 1;
+  }
+
+  &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #c6c6c6;
+  }
+}
+
 [data-tooltip] {
   position: relative;
 }
