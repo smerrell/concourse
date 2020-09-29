@@ -4,6 +4,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/tedsuo/rata"
 )
 
@@ -197,7 +198,7 @@ var Routes = rata.Routes([]rata.Route{
 	{Path: "/api/v1/workers", Method: "GET", Name: ListWorkers},
 	{Path: "/api/v1/workers", Method: "POST", Name: RegisterWorker},
 	{Path: "/api/v1/workers/:worker_name/land", Method: "PUT", Name: LandWorker},
-	{Path: "/api/v1/workers/:worker_name/retire", Method: "PUT", Name: RetireWorker},
+	{Path: "/api/v1/workers/{worker_name}/retire", Method: "PUT", Name: RetireWorker},
 	{Path: "/api/v1/workers/:worker_name/prune", Method: "PUT", Name: PruneWorker},
 	{Path: "/api/v1/workers/:worker_name/heartbeat", Method: "PUT", Name: HeartbeatWorker},
 	{Path: "/api/v1/workers/:worker_name", Method: "DELETE", Name: DeleteWorker},
@@ -274,17 +275,20 @@ func CreatePathForRoute(action string, params map[string]string) (string, error)
 }
 
 func NewRouter(handlers map[string]http.Handler) (http.Handler, error) {
-	routes := rata.Routes{}
-	for action, _ := range handlers {
+	r := mux.NewRouter()
+	for action, handler := range handlers {
 		for _, route := range Routes {
 			if route.Name == action {
-				routes = append(routes, route)
+				r.Path(route.Path).
+					Handler(handler).
+					Name(action).
+					Methods(route.Method)
 			}
 		}
 	}
-	return rata.NewRouter(routes, handlers)
+	return r, nil
 }
 
 func GetParam(r *http.Request, paramName string) string {
-	return rata.Param(r, paramName)
+	return mux.Vars(r)[paramName]
 }
