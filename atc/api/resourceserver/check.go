@@ -10,14 +10,13 @@ import (
 	"github.com/concourse/concourse/atc"
 	"github.com/concourse/concourse/atc/api/present"
 	"github.com/concourse/concourse/atc/db"
-	"github.com/tedsuo/rata"
 )
 
 func (s *Server) CheckResource(dbPipeline db.Pipeline) http.Handler {
 	logger := s.logger.Session("check-resource")
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		resourceName := rata.Param(r, "resource_name")
+		resourceName := atc.GetParam(r, "resource_name")
 
 		var reqBody atc.CheckRequestBody
 		err := json.NewDecoder(r.Body).Decode(&reqBody)
